@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Domain;
+use App\Models\Hosting;
 use App\Models\Order;
 use App\Models\TodoList;
 use App\Models\User;
@@ -99,6 +100,15 @@ class TodoListController extends Controller
 
         $domain->user_id = $request->user_id;
         $domain->save();
+        $hosting = new Hosting();
+        $hosting->capacity = $request->capacity;
+        $hosting->hosting_date = $request->hosting_date;
+        $hosting->total_email = $request->total_email;
+        $hosting->login_url = $request->login_url;
+        $hosting->login_username = $request->login_username;
+        $hosting->login_password = $request->login_password;
+        $hosting->domain_id = $domain->id;
+        $hosting->save();
 
         $order = Order::find($request->order_id);
         $order->status_order = 'DONE';
