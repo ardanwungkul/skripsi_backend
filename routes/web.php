@@ -30,6 +30,7 @@ Route::get('/', function () {
 
 Route::get('/checkout', [OrderController::class, 'order']);
 Route::get('/payment/check/{code}', [OrderController::class, 'return'])->name('order.return');
+Route::post('callback', [OrderController::class, 'callback']);
 Route::get('/broadcasting/auth', function () {
     return response()->json(['message' => 'Broadcasting Auth Endpoint']);
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Domain;
+use App\Models\Hosting;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domain = Domain::orderBy('created_at', 'desc')->with('user')->get();
+        $domain = Domain::orderBy('created_at', 'desc')->with('user', 'vendor', 'hosting')->get();
         return response()->json($domain);
     }
 
@@ -74,7 +75,17 @@ class DomainController extends Controller
 
             $domain->user_id = $user->id;
         }
+
         $domain->save();
+        $hosting = new Hosting();
+        $hosting->capacity = $request->capacity;
+        $hosting->hosting_date = $request->hosting_date;
+        $hosting->total_email = $request->total_email;
+        $hosting->login_url = $request->login_url;
+        $hosting->login_username = $request->login_username;
+        $hosting->login_password = $request->login_password;
+        $hosting->domain_id = $domain->id;
+        $hosting->save();
         return response()->json($domain);
     }
 
@@ -84,7 +95,7 @@ class DomainController extends Controller
      */
     public function edit($domain)
     {
-        $domain = Domain::with('user', 'vendor')->find($domain);
+        $domain = Domain::with('user', 'vendor', 'hosting')->find($domain);
         $vendor = Vendor::all();
         $user = User::where('role', 'user')->get();
         if ($domain) {
@@ -140,6 +151,15 @@ class DomainController extends Controller
             $domain->user_id = $user->id;
         }
         $domain->save();
+        $hosting = $domain->hosting;
+        $hosting->capacity = $request->capacity;
+        $hosting->hosting_date = $request->hosting_date;
+        $hosting->total_email = $request->total_email;
+        $hosting->login_url = $request->login_url;
+        $hosting->login_username = $request->login_username;
+        $hosting->login_password = $request->login_password;
+        $hosting->domain_id = $domain->id;
+        $hosting->save();
         return response()->json($domain);
     }
 

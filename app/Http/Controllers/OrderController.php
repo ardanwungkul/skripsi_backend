@@ -20,17 +20,10 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return response()->json(Order::with('user')->get());
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return response()->json([
@@ -38,7 +31,6 @@ class OrderController extends Controller
             'template' => Template::all()
         ]);
     }
-
     public function dataByUserId($id)
     {
         $order = Order::where('user_id', $id)->with('template', 'user', 'package')->orderBy('created_at', 'desc')->get();
@@ -63,10 +55,6 @@ class OrderController extends Controller
         }
         return response()->json($order);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // return response()->json($request);
@@ -115,7 +103,6 @@ class OrderController extends Controller
 
         return $transactionCode;
     }
-
     public function payment(Request $request)
     {
         $order = Order::with('template', 'package', 'user')->find($request->order_id);
@@ -166,5 +153,20 @@ class OrderController extends Controller
         }
         $order->save();
         return Redirect::away(env('FRONTEND_URL') . '/order/checkout/' . $code);
+    }
+    public function callback(Request $request)
+    {
+        $id = $request->id;
+        $status = $request->status;
+        $order = Order::where('invoice_id', $id)->first();
+        if ($status == 'SETTLED' || $status == 'PAID') {
+            $order->status_payment = 'SUCCESS';
+        } else if ($status == 'EXPIRED') {
+            $order->status_payment = 'EXPIRED';
+        } else {
+            $order->status_payment = $status;
+        }
+        $order->save();
+        return response()->json(['success']);
     }
 }
