@@ -106,6 +106,7 @@ class TodoListController extends Controller
 
         $todolist = TodoList::find($request->todolist_id);
         $todolist->status = 'submited';
+        $todolist->submit_at = now();
         $todolist->save();
         return response()->json($request->todolist_id);
     }
