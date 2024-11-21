@@ -41,17 +41,17 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(12345678),
             'role' => 'support'
         ]);
-        for ($i = 0; $i < 50; $i++) {
-            Domain::insert([
-                'domain_name' => 'domain' . $i . '.' . Str::random(3) . '.com',
-                'start_date' => Date::now()->subDays(rand(1, 365))->format('Y-m-d'),
-                'expired_date' => Date::now()->addDays(rand(1, 365))->format('Y-m-d'),
-                'description' => Str::random(100),
-                'vendor_id' => rand(1, 3),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        // for ($i = 0; $i < 50; $i++) {
+        //     Domain::insert([
+        //         'domain_name' => 'domain' . $i . '.' . Str::random(3) . '.com',
+        //         'start_date' => Date::now()->subDays(rand(1, 365))->format('Y-m-d'),
+        //         'expired_date' => Date::now()->addDays(rand(1, 365))->format('Y-m-d'),
+        //         'description' => Str::random(100),
+        //         'vendor_id' => rand(1, 3),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]);
+        // }
         $data_package = [
             [
                 'package_name' => 'Paket Simple Pemula',

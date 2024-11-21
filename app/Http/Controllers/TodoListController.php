@@ -63,6 +63,7 @@ class TodoListController extends Controller
         foreach ($request->todo as $td) {
             $td = TodoList::find($td);
             $td->status = 'submited';
+            $td->submit_at = now();
             $td->save();
             $todo[] = $td;
         }
